@@ -150,6 +150,8 @@ MonoBehaviour:
   BuildHeight: 17
   BuildWidth: 20
   ChanceToBuild: 0.3
+  playerPrefab: {fileID: 857356624922146177, guid: 7e2c7168eb3fef14bb76710e11c5d672,
+    type: 3}
 --- !u!4 &330466028
 Transform:
   m_ObjectHideFlags: 0
