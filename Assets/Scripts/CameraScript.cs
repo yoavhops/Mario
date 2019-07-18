@@ -15,9 +15,7 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         _target += Vector3.up * Configuration.Singleton.CameraSpeed * Time.deltaTime;
         transform.position = Vector3.Lerp(transform.position, _target, 0.1f);
-         
     }
 }

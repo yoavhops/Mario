@@ -24,16 +24,36 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        OnStart();
+    }
+
+    protected virtual void OnStart()
+    {
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         charcterGrounding = GetComponent<CharcterGrounding>();
     }
 
-    // Update is called once per frame
+    protected virtual float GetAxisRaw()
+    {
+        return Input.GetAxisRaw("Horizontal");
+    }
+
+    protected bool GetButtonDown(string button)
+    {
+        return Input.GetButtonDown(button);
+    }
+
     void Update()
     {
-        H = Input.GetAxisRaw("Horizontal");
+        OnUpdate();
+    }
+
+
+    protected virtual void OnUpdate()
+    {
+        H = GetAxisRaw();
 
         if (H != 0)
         {
@@ -54,11 +74,10 @@ public class Player : MonoBehaviour
             spriteRenderer.flipX = false;
         }
 
-        if (Input.GetButtonDown("Fire1") && charcterGrounding.IsGrounded)
+        if (GetButtonDown("Fire1") && charcterGrounding.IsGrounded)
         {
             rigidbody2D.velocity = Vector3.zero;
             rigidbody2D.AddForce(Vector2.up * jumpForce);
-            
         }
 
         if (!charcterGrounding.IsGrounded)

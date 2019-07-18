@@ -71,10 +71,10 @@ GameObject:
   - component: {fileID: 857356624922146206}
   - component: {fileID: 857356624922146207}
   - component: {fileID: 857356624922146176}
-  - component: {fileID: 857356624922146205}
   - component: {fileID: 1996529359}
+  - component: {fileID: 4324464644931436642}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -144,21 +144,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &857356624922146205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 857356624922146177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f928a65aea16e4149a91487d01e41e66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 6
-  jumpForce: 800
-  jumpSprite: {fileID: 21300000, guid: 3a017b670e45b7e4b8b352b05fcb342d, type: 3}
 --- !u!114 &1996529359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +163,21 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4324464644931436642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857356624922146177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cb227607d97c14d80f723504c93fe9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 3
+  jumpForce: 400
+  jumpSprite: {fileID: 21300000, guid: 8e9c5d874756b8149a84d8cca1b510a3, type: 3}
 --- !u!1001 &857356625302916316
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -232,6 +232,18 @@ PrefabInstance:
     - target: {fileID: 431876, guid: 86665e566268cb5469dbb3747ca2839d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 21200848, guid: 86665e566268cb5469dbb3747ca2839d, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4433962
+      objectReference: {fileID: 0}
+    - target: {fileID: 21200848, guid: 86665e566268cb5469dbb3747ca2839d, type: 3}
+      propertyPath: m_Color.g
+      value: 0.13660187
+      objectReference: {fileID: 0}
+    - target: {fileID: 21200848, guid: 86665e566268cb5469dbb3747ca2839d, type: 3}
+      propertyPath: m_Color.b
+      value: 0.13176396
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 86665e566268cb5469dbb3747ca2839d, type: 3}

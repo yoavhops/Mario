@@ -13,11 +13,19 @@ public class LandBlock : MonoBehaviour , IEquatable<LandBlock>
     [SerializeField]
     private int _y;
 
+    public int X { get { return _x;} }
+    public int Y { get { return _y;} }
+
     private static void InitPool()
     {
         _pool = new VerySimplePool<LandBlock>(
             () => { return Instantiate(WorldBuilder.Singleton.GetLandBlocksPrefabs()); }, 
             500);
+    }
+
+    public static void DestroyLand(LandBlock landBlock)
+    {
+        _pool.Push(landBlock);
     }
 
     public static LandBlock LandBlockFactory(LandBlock landBlockPrefab, int x, int y, Transform parent)

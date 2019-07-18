@@ -24,7 +24,10 @@ public class WorldBuilder : MonoBehaviour
     [Header("Player Prefab")]
     [SerializeField] private GameObject playerPrefab;
 
+    [Header("Enemy Prefab")]
+    [SerializeField] private Enemy EnemyPrefab;
 
+    private Dictionary<int, Dictionary<int, LandBlock>> _dictionaryPositionToLandBlock = new Dictionary<int, Dictionary<int, LandBlock>>();
 
     private HashSet<LandBlock> _allCreatedLandBlock = new HashSet<LandBlock>();
 
@@ -59,17 +62,14 @@ public class WorldBuilder : MonoBehaviour
 
     void Start()
     {
+        _currentTimeToNextLine = GetTimeToNextLine();
         start = _allCreatedLandBlock.FirstOrDefault();
         InitializePlayer();
     }
 
-
-        _currentTimeToNextLine = GetTimeToNextLine();
-    }
-
     private void AddLandBlocksLine(int lineHeight)
     {
-
+        _dictionaryPositionToLandBlock[lineHeight] = new Dictionary<int, LandBlock>();
         _currentLine = lineHeight;
 
         for (int x = 0; x < BuildWidth; x++)
@@ -81,11 +81,35 @@ public class WorldBuilder : MonoBehaviour
         }
     }
 
+    private void RemoveLine(int lineHeight)
+    {
+        if (!_dictionaryPositionToLandBlock.ContainsKey(lineHeight))
+        {
+            return;
+        }
+
+        var dic = _dictionaryPositionToLandBlock[lineHeight];
+        foreach (var landBlock in dic.ToList())
+        {
+            RemoveBlock(landBlock.Value);
+        }
+
+        _dictionaryPositionToLandBlock.Remove(lineHeight);
+    }
+
+    private void RemoveBlock(LandBlock block)
+    {
+        _dictionaryPositionToLandBlock[block.Y].Remove(block.X);
+        _allCreatedLandBlock.Remove(block);
+        LandBlock.DestroyLand(block);
+    }
+
     private void AddLandBlock(int x, int y)
     {
         var landBlockPrefab = GetLandBlocksPrefabs();
         var landBlock = LandBlock.LandBlockFactory(landBlockPrefab, x, y, LandBlocksHolder);
         _allCreatedLandBlock.Add(landBlock);
+        _dictionaryPositionToLandBlock[y][x] = landBlock;
     }
 
     void Update()
@@ -96,12 +120,22 @@ public class WorldBuilder : MonoBehaviour
         {
             _currentTimeToNextLine = GetTimeToNextLine();
             AddLandBlocksLine(++_currentLine);
+            RemoveLine(_currentLine - BuildHeight - 5);
+
+            AddEnemy(Random.Range(0, BuildWidth), _currentLine);
+
         }
+    }
+
+    private void AddEnemy(int x, float y)
+    {
+        var enemy = Instantiate(EnemyPrefab, 
+            new Vector3(x, y + 3f ,0 ), Quaternion.identity);
     }
 
     private void InitializePlayer()
     {
-        var player = Instantiate(playerPrefab, start.transform.position + (Vector3.up*3f) + Vector3.right, Quaternion.identity);
+        var player = Instantiate(playerPrefab, start.transform.position + (Vector3.up*3f), Quaternion.identity);
     }
 
 }
