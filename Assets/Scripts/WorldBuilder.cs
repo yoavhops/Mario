@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class WorldBuilder : MonoBehaviour
 {
+    public static WorldBuilder Singleton;
+
     public Transform LandBlocksHolder;
 
     public List<LandBlock> LandBlocksPrefabs;
+
+    private int _currentLine;
 
     [Header("Settings")]
     public int BuildHeight = 20;
@@ -20,14 +24,18 @@ public class WorldBuilder : MonoBehaviour
 
     //will be dynamic according to player going up.
     private int _currentBuildingLine = 0;
-    
-    private LandBlock GetLandBlocksPrefabs()
+
+    private float _currentTimeToNextLine;
+
+    public LandBlock GetLandBlocksPrefabs()
     {
         return LandBlocksPrefabs.PickRandom();
     }
 
     void Awake()
     {
+        Singleton = this;
+
         LandBlocksHolder.position -= new Vector3(BuildWidth / 2f, 0, 0);
 
         for (int lineHeight = 0; lineHeight < BuildHeight; lineHeight++)
@@ -36,8 +44,21 @@ public class WorldBuilder : MonoBehaviour
         }
     }
 
+    public float GetTimeToNextLine()
+    {
+        return 1 / Configuration.Singleton.CameraSpeed;
+    }
+
+    void Start()
+    {
+        _currentTimeToNextLine = GetTimeToNextLine();
+    }
+
     private void AddLandBlocksLine(int lineHeight)
     {
+
+        _currentLine = lineHeight;
+
         for (int x = 0; x < BuildWidth; x++)
         {
             if (Random.value < ChanceToBuild)
@@ -54,6 +75,16 @@ public class WorldBuilder : MonoBehaviour
         _allCreatedLandBlock.Add(landBlock);
     }
 
+    void Update()
+    {
+        _currentTimeToNextLine -= Time.deltaTime;
 
+        if (_currentTimeToNextLine < 0)
+        {
+            _currentTimeToNextLine = GetTimeToNextLine();
+            AddLandBlocksLine(++_currentLine);
+        }
+
+    }
 
 }

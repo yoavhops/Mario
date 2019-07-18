@@ -5,14 +5,29 @@ using UnityEngine;
 
 public class LandBlock : MonoBehaviour , IEquatable<LandBlock>
 {
+
+    public static VerySimplePool<LandBlock> _pool;
+
     [SerializeField]
     private int _x;
     [SerializeField]
     private int _y;
 
+    private static void InitPool()
+    {
+        _pool = new VerySimplePool<LandBlock>(
+            () => { return Instantiate(WorldBuilder.Singleton.GetLandBlocksPrefabs()); }, 
+            500);
+    }
+
     public static LandBlock LandBlockFactory(LandBlock landBlockPrefab, int x, int y, Transform parent)
     {
-        var landBlock = Instantiate(landBlockPrefab);
+        if (_pool == null)
+        {
+            InitPool();
+        }
+
+        var landBlock = _pool.Pop();
         landBlock.Init(x, y, parent);
         return landBlock;
     }
