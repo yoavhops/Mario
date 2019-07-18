@@ -1,26 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class WorldBuilder : MonoBehaviour
 {
     public static WorldBuilder Singleton;
+    [SerializeField] private Transform LandBlocksHolder;
 
-    public Transform LandBlocksHolder;
 
-    public List<LandBlock> LandBlocksPrefabs;
+    [SerializeField] private List<LandBlock> LandBlocksPrefabs;
 
     private int _currentLine;
 
     [Header("Settings")]
-    public int BuildHeight = 20;
-    public int BuildWidth = 20;
+    [SerializeField] private int BuildHeight = 20;
+    [SerializeField] private int BuildWidth = 20;
 
     [Header("Chance To Build")]
     //should use noise func
-    public float ChanceToBuild = 0.1f;
+    [SerializeField] private float ChanceToBuild = 0.1f;
+
+    [Header("Player Prefab")]
+    [SerializeField] private GameObject playerPrefab;
+
+
 
     private HashSet<LandBlock> _allCreatedLandBlock = new HashSet<LandBlock>();
+
+    private LandBlock start;
 
     //will be dynamic according to player going up.
     private int _currentBuildingLine = 0;
@@ -51,6 +59,11 @@ public class WorldBuilder : MonoBehaviour
 
     void Start()
     {
+        start = _allCreatedLandBlock.FirstOrDefault();
+        InitializePlayer();
+    }
+
+
         _currentTimeToNextLine = GetTimeToNextLine();
     }
 
@@ -84,7 +97,11 @@ public class WorldBuilder : MonoBehaviour
             _currentTimeToNextLine = GetTimeToNextLine();
             AddLandBlocksLine(++_currentLine);
         }
+    }
 
+    private void InitializePlayer()
+    {
+        var player = Instantiate(playerPrefab, start.transform.position + (Vector3.up*3f) + Vector3.right, Quaternion.identity);
     }
 
 }
