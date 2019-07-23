@@ -4,16 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = System.Random;
 
-public class Enemy : Player
+public class Enemy : Entity
 {
 
     private float dir = 0f;
 
-    protected override void OnStart()
+    private void Start()
     {
-        base.OnStart();
         dir = UnityEngine.Random.value * 2 - 1;
     }
+
 
     protected override float GetAxisRaw()
     {
@@ -27,8 +27,7 @@ public class Enemy : Player
 
     protected virtual void OnUpdate()
     {
-        base.OnUpdate();
-
+        
         //TODO : check for dir change.. when hitting wall
 
     }

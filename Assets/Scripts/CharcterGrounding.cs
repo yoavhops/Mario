@@ -31,10 +31,7 @@ public class CharcterGrounding : MonoBehaviour
             if (IsGrounded == true)
                 break;
         }
-        
-        
         StickToMovingObjects();
-
 
     }
 

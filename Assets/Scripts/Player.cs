@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Entity
 {
     [SerializeField]
     private float speed = 3;
     [SerializeField]
-    private float jumpForce = 400;
+    private float jumpForce = 400f;
     [SerializeField]
     private Sprite jumpSprite;
-
-
+    [SerializeField]
+    private float wallJumpForce = 200f;
 
     private float H;
     private Animator animator;
@@ -24,18 +24,13 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        OnStart();
-    }
-
-    protected virtual void OnStart()
-    {
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         rigidbody2D = GetComponent<Rigidbody2D>();
         charcterGrounding = GetComponent<CharcterGrounding>();
     }
 
-    protected virtual float GetAxisRaw()
+    protected override float GetAxisRaw()
     {
         return Input.GetAxisRaw("Horizontal");
     }
@@ -46,12 +41,6 @@ public class Player : MonoBehaviour
     }
 
     void Update()
-    {
-        OnUpdate();
-    }
-
-
-    protected virtual void OnUpdate()
     {
         H = GetAxisRaw();
 
@@ -69,7 +58,7 @@ public class Player : MonoBehaviour
         {
             spriteRenderer.flipX = true;
         }
-        else
+        else if (H > 0)
         {
             spriteRenderer.flipX = false;
         }
@@ -78,6 +67,10 @@ public class Player : MonoBehaviour
         {
             rigidbody2D.velocity = Vector3.zero;
             rigidbody2D.AddForce(Vector2.up * jumpForce);
+            if (charcterGrounding.GroundedDirection != Vector2.down)
+            {
+                rigidbody2D.AddForce(charcterGrounding.GroundedDirection * -1f * wallJumpForce);
+            }
         }
 
         if (!charcterGrounding.IsGrounded)
